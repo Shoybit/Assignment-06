@@ -90,6 +90,42 @@ const showSpinner = (show) => {
   treeContainer.style.display = show ? "none" : "grid";
 };
 
+const cartTotal = document.getElementById("cart-total");
+const cartItemsContainer = document.getElementById("cart-items");
+
+
+let cart = [];
+let total = 0;
+
+const addToCart = (item) => {
+  cart.push(item);
+  total += item.price;
+  renderCart();
+  alert(`${item.name} has been added to the cart`);
+};
+
+const removeFromCart = (index) => {
+  total -= cart[index].price;
+  cart.splice(index, 1);
+  renderCart();
+};
+
+const renderCart = () => {
+  cartItemsContainer.innerHTML = "";
+  cart.forEach((item, index) => {
+    cartItemsContainer.innerHTML += `
+      <li class="bg-[#f0fdf4] p-3 rounded">
+        <div class="flex justify-between items-center">
+          <span>${item.name}</span>
+          <button onclick="removeFromCart(${index})" class="text-red-500 font-bold mt-1">X</button>
+        </div>
+        <span class="text-[#889396]">৳${item.price} X 1</span>
+      </li>
+    `;
+  });
+  cartTotal.innerText = `৳${total}`;
+};
+
 
 
 loadCategories();
