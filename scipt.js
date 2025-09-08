@@ -2,49 +2,6 @@
 
 const treeContainer = document.getElementById("tree-container");
 const categoryList = document.getElementById("category-list");
-const cartItemsContainer = document.getElementById("cart-items");
-const cartTotal = document.getElementById("cart-total");
-
-
-const openModal = (id) => {
-  fetch(`https://openapi.programming-hero.com/api/plant/${id}`)
-    .then(res => res.json())
-    .then(data => {
-      const plant = data.plants;
-      const modal = document.getElementById("my_modal_5");
-      modal.innerHTML = `
-        <div class="modal-box">
-          <h3 class="text-lg font-bold">${plant.name}</h3>
-          <img class="w-full h-48 object-cover rounded-lg my-3" src="${plant.image}" alt="${plant.name}">
-          <p class="py-2">${plant.description || "No description available."}</p>
-          <div class="flex justify-between items-center mt-2">
-            <p class="bg-[#DCFCE7] px-2 py-1 rounded-full text-[#15803D]">${plant.category}</p>
-            <p class="font-semibold">৳${plant.price}</p>
-          </div>
-          <div class="modal-action">
-            <form method="dialog">
-              <button class="btn">Close</button>
-            </form>
-          </div>
-        </div>
-      `;
-      modal.showModal();
-    })
-    .catch(err => console.error(err));
-};
-
-
-const showSpinner = (show) => {
-  if (!document.getElementById("spinner")) {
-    const spinnerDiv = document.createElement("div");
-    spinnerDiv.id = "spinner";
-    spinnerDiv.className = "col-span-8 flex justify-center items-center py-10";
-    spinnerDiv.innerHTML = `<span class="loading loading-dots loading-xl"></span>`;
-    treeContainer.parentNode.insertBefore(spinnerDiv, treeContainer);
-  }
-  document.getElementById("spinner").style.display = show ? "flex" : "none";
-  treeContainer.style.display = show ? "none" : "grid";
-};
 
 
 const loadCategories = () => {
@@ -121,38 +78,18 @@ const displayTrees = (plants) => {
   });
 };
 
-
-let cart = [];
-let total = 0;
-
-const addToCart = (item) => {
-  cart.push(item);
-  total += item.price;
-  renderCart();
-  alert(`${item.name} has been added to the cart`);
+const showSpinner = (show) => {
+  if (!document.getElementById("spinner")) {
+    const spinnerDiv = document.createElement("div");
+    spinnerDiv.id = "spinner";
+    spinnerDiv.className = "col-span-8 flex justify-center items-center py-10";
+    spinnerDiv.innerHTML = `<span class="loading loading-dots loading-xl"></span>`;
+    treeContainer.parentNode.insertBefore(spinnerDiv, treeContainer);
+  }
+  document.getElementById("spinner").style.display = show ? "flex" : "none";
+  treeContainer.style.display = show ? "none" : "grid";
 };
 
-const removeFromCart = (index) => {
-  total -= cart[index].price;
-  cart.splice(index, 1);
-  renderCart();
-};
-
-const renderCart = () => {
-  cartItemsContainer.innerHTML = "";
-  cart.forEach((item, index) => {
-    cartItemsContainer.innerHTML += `
-      <li class="bg-[#f0fdf4] p-3 rounded">
-        <div class="flex justify-between items-center">
-          <span>${item.name}</span>
-          <button onclick="removeFromCart(${index})" class="text-red-500 font-bold mt-1">X</button>
-        </div>
-        <span class="text-[#889396]">৳${item.price} X 1</span>
-      </li>
-    `;
-  });
-  cartTotal.innerText = `৳${total}`;
-};
 
 
 loadCategories();
