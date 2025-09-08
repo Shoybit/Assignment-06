@@ -126,7 +126,32 @@ const renderCart = () => {
   cartTotal.innerText = `৳${total}`;
 };
 
-
+const openModal = (id) => {
+  fetch(`https://openapi.programming-hero.com/api/plant/${id}`)
+    .then(res => res.json())
+    .then(data => {
+      const plant = data.plants;
+      const modal = document.getElementById("my_modal_5");
+      modal.innerHTML = `
+        <div class="modal-box">
+          <h3 class="text-lg font-bold">${plant.name}</h3>
+          <img class="w-full h-48 object-cover rounded-lg my-3" src="${plant.image}" alt="${plant.name}">
+          <p class="py-2">${plant.description || "No description available."}</p>
+          <div class="flex justify-between items-center mt-2">
+            <p class="bg-[#DCFCE7] px-2 py-1 rounded-full text-[#15803D]">${plant.category}</p>
+            <p class="font-semibold">৳${plant.price}</p>
+          </div>
+          <div class="modal-action">
+            <form method="dialog">
+              <button class="btn">Close</button>
+            </form>
+          </div>
+        </div>
+      `;
+      modal.showModal();
+    })
+    .catch(err => console.error(err));
+};
 
 loadCategories();
 loadTrees("all");
